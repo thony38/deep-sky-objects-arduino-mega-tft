@@ -14,3 +14,5 @@ Précision : Heure gérée par module RTC DS3231 avec gestion de l'heure d'été
 Arduino Mega + Écran TFT (ILI9486).
 
 Module RTC DS3231 & Carte SD.
+
+INFO TFT --> https://www.lcdwiki.com/3.5inch_Arduino_Display-Mega2560
