@@ -166,7 +166,7 @@ void loop() {
     
     EquatorialCoordinates eqCoordinates;
     eqCoordinates.ra = RA; 
-    eqCoordinates.dec = DEC;
+    eqCoordinates.dec = dec_coord;
 
     // Calcul de l'Altitude, Azimut, Lever/Coucher
     HorizontalCoordinates horizonData = Ephemeris::equatorialToHorizontalCoordinatesAtDateAndTime(
