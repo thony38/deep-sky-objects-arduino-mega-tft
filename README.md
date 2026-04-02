@@ -16,3 +16,8 @@ Arduino Mega + Écran TFT (ILI9486).
 Module RTC DS3231 & Carte SD.
 
 INFO TFT --> https://www.lcdwiki.com/3.5inch_Arduino_Display-Mega2560
+
+🛑EDIT🛑
+Ajout d'une fonction de difficulté 
+Ajout d'objets : IC1805 HEART NEBULA
+                 NGC2237 Rosette Nebula
