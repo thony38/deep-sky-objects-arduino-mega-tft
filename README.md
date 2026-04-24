@@ -1,12 +1,12 @@
 # deep-sky-objects-arduino-mega-tft
 🌌 Horloge Astronomique DSO
-Station d'information astronomique basée sur Arduino Mega. Elle calcule et affiche la position d'objets célèbres en temps réel.
+Station info astronomique basée sur Arduino Mega. Calcule et affiche la position d'objets célèbres en temps réel.
 
 ✨ Fonctions
 
-Suivi en direct : Calcul d'Altitude/Azimut et Lever/Coucher (Andromède, Orion, Pléiades, LMC).
+Suivi en direct : Calcul d'Altitude/Azimut et Lever/Coucher (Andromède, Orion, Pléiades, NGC7000, NGC2237, IC1805, ...).
 
-Visuels : Affichage d'images BMP depuis une carte SD et dessin des constellations. 🚧En train de régler le dessin des constellations🚧
+Visuels : Affichage d'images BMP depuis une carte SD et .
 
 Précision : Heure gérée par module RTC DS3231 avec gestion de l'heure d'été.
 
