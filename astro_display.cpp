@@ -3,70 +3,6 @@
 
 #include "astro_display.h"
 
-
-// --- DÉFINITIONS DES CONSTELLATIONS (Coordonnées relatives 0-100) ---
-
-// Les coordonnées sont (X_début, Y_début, X_fin, Y_fin)
-// Zone de dessin virtuelle : 100x100
-
-// 1. Andromède (And) - Représentation simplifiée de la chaîne d'étoiles
-const int AND_LINES[] = {
-    // --- 1. Chaîne principale (Beaucoup plus plate, de Y=70 à Y=55) ---
-    
-    // Segment 1: Almach (X=10, Y=70) à Mirach (X=35, Y=65)
-    // Almach est la première étoile (la plus à gauche/bas)
-    10, 70,  35, 65,  
-    
-    // Segment 2: Mirach (X=35, Y=65) à l'étoile suivante (X=65, Y=60)
-    35, 65,  65, 60,  
-    
-    // Segment 3: Étoile suivante à Alpheratz (X=90, Y=55)
-    65, 60,  90, 55,
-    
-    // --- 2. Bifurcation vers le haut (partant de Mirach - Plus vertical et net) ---
-    // Segment 4: Part de Mirach (X=35, Y=65) vers l'étoile 1 de la bifurcation (X=40, Y=40)
-    35, 65,  40, 40, 
-    
-    // Segment 5: Étoile 1 de la bifurcation (X=40, Y=40) à l'étoile 2 (X=45, Y=10)
-    40, 40,  45, 10,
-    
-    // Terminateur
-    -1, -1, -1, -1 
-};
-
-// 2. Orion (Ori) - Représentation du sablier avec la ceinture et l'épée
-const int ORI_LINES[] = {
-    // Épaule supérieure gauche à épaule supérieure droite
-    10, 10,  90, 10, 
-    10, 10,  20, 80,
-    90, 10,  80, 80,
-    20, 80,  80, 80, 
-    
-    // Ceinture d'Orion (centrée horizontalement)
-    25, 45,  50, 45,
-    50, 45,  75, 45,
-    
-    // Épée d'Orion (vers la Nébuleuse M42)
-    50, 45,  50, 65,
-    // Terminateur
-    -1, -1, -1, -1 
-};
-
-// 3. Taureau (Tau) - Le "V" de la tête (Hyades) et les Pléiades (M45)
-const int TAU_LINES[] = {
-    // Tête du Taureau (Hyades en forme de V)
-    10, 80,  50, 30, 
-    90, 80,  50, 30, 
-    
-    // Corne 1 (Gauche)
-    50, 30,  20, 5,  
-    // Corne 2 (Droite)
-    50, 30,  80, 5,  
-    // Terminateur
-    -1, -1, -1, -1 
-};
-
-
 // Implémentation de isDST (Détection Heure d'Été/Hiver)
 bool isDST(int year, int month, int day, int hour) {
     // Règle : Du dernier dimanche de mars (à 2h00) au dernier dimanche d'octobre (à 3h00)
@@ -115,10 +51,10 @@ void getObjectMetadata(int objectId, const char** name, const char** constellati
         *ra = M45_RA_HOURS;
         *dec_coord = M45_DEC_DEGREES; 
     } else if (objectId == 3) {
-        *name = "LMC";
-        *constellation = "DORADE/MENSA";
-        *ra = LMC_RA_HOURS;
-        *dec_coord = LMC_DEC_DEGREES;
+        *name = "Neb.Amerique du Nord (NGC7000)";
+        *constellation = "Cygne";
+        *ra = NGC7000_RA_HOURS;
+        *dec_coord = NGC7000_DEC_DEGREES;
     }
     else {
         *name = "INCONNU";
@@ -152,25 +88,23 @@ void displayDateTime(DateTime now) {
     my_lcd.Set_Text_Mode(1);
     my_lcd.Set_Text_colour(GREEN);
     my_lcd.Set_Text_Back_colour(BLACK);
-    my_lcd.Set_Text_Size(2);
-    my_lcd.Fill_Rect(270, 10, 200, 40, BLACK);
+    my_lcd.Set_Text_Size(2); // Taille de texte
+    my_lcd.Fill_Rect(0, 0, 250, 25, BLACK);
 
-    my_lcd.Print_String("Date: ", 270, 10);
-    my_lcd.Print_Number_Int(now.day(), 335, 10, 2, '0', 10);
-    my_lcd.Print_String("/", 365, 10);
-    my_lcd.Print_Number_Int(now.month(), 380, 10, 2, '0', 10);
-    my_lcd.Print_String("/", 400, 10);
-    my_lcd.Print_Number_Int(now.year(), 420, 10, 4, '0', 10);
-    my_lcd.Print_String("Heure: ", 290, 30);
-    my_lcd.Print_Number_Int(now.hour(), 370, 30, 2, '0', 10);
-    my_lcd.Print_String(":", 400, 30);
-    my_lcd.Print_Number_Int(now.minute(), 420, 30, 2, '0', 10);
+    my_lcd.Print_Number_Int(now.day(), 10, 5, 2, '0', 10);
+    my_lcd.Print_String("/", 40, 5);
+    my_lcd.Print_Number_Int(now.month(), 55, 5, 2, '0', 10);
+    my_lcd.Print_String("/", 85, 5);
+    my_lcd.Print_Number_Int(now.year(), 100, 5, 4, '0', 10);
+    my_lcd.Print_String("-", 160, 5);
+    my_lcd.Print_Number_Int(now.hour(), 180, 5, 2, '0', 10);
+    my_lcd.Print_String(":", 205, 5);
+    my_lcd.Print_Number_Int(now.minute(), 220, 5, 2, '0', 10);
 }
 
 // Implémentation de displayObjectInfo (Affichage universel pour M31, M42, M45)
 void displayObjectInfo(int objectId, double altitude, double azimuth, FLOAT rise, FLOAT set, RiseAndSetState riseAndSetState, int offsetHeure) {
-    my_lcd.Fill_Rect(250, 80, 230, 240, BLACK); 
-
+    my_lcd.Fill_Rect(250, 0, 229, 320, BLACK);
     const char *objectName, *constellationName;
     double ra_dummy, dec_dummy;
     getObjectMetadata(objectId, &objectName, &constellationName, &ra_dummy, &dec_dummy);
@@ -179,18 +113,9 @@ void displayObjectInfo(int objectId, double altitude, double azimuth, FLOAT rise
     
     // Titre de l'objet (CYAN)
     my_lcd.Set_Text_colour(CYAN);
-    my_lcd.Print_String(objectName, 250, 80); 
+    my_lcd.Print_String(objectName, 275, 20); 
 
     
-    // Définir la zone d'affichage (Exemple : 260, 240, 100x100 pixels pour le dessin)
- // 2. Définition des dimensions (avec une marge de 10px de chaque côté)
-    int constel_w = 220; // 240 (largeur dispo) - 20 (marges) = 220
-    int constel_h = 110; // 130 (hauteur dispo) - 20 (marges) = 110
-    
-    // 3. Définition de la position de départ (coin haut-gauche du dessin)
-    int constel_x = 250; // 240 (X de départ dispo) + 10 (marge) = 250
-    int constel_y = 205; // 195 (Y de départ dispo) + 10 (marge) = 205
-
     my_lcd.Fill_Rect(250, 200, 230, 130, BLACK); // Nettoie le bas de la zone info
 
     my_lcd.Set_Text_colour(GREEN);
@@ -198,11 +123,8 @@ void displayObjectInfo(int objectId, double altitude, double azimuth, FLOAT rise
     my_lcd.Print_String("Constellation:", 250, 185); 
     my_lcd.Set_Text_colour(WHITE);
     my_lcd.Print_String(constellationName, 370, 185);
-    // Définition de la couleur de dessin pour les formes (Lignes et cercles)
+
     my_lcd.Set_Draw_color(WHITE); 
-    
-    // Dessiner la constellation (Dessin 100x100 relatif est maintenant projeté sur 100x75)
-    drawConstellation(objectId, constel_x, constel_y, constel_w, constel_h);
 
     // --- Altitude (Label VERT, Valeur JAUNE, Statut ROUGE/VERT) ---
     my_lcd.Set_Text_Size(2);
@@ -266,45 +188,73 @@ void displayObjectInfo(int objectId, double altitude, double azimuth, FLOAT rise
     }
 }
 
-// Implémentation de drawConstellation
-void drawConstellation(int objectId, int x_start, int y_start, int width, int height) {
-    const int *lines = nullptr;
+/*void displayVisibilitySlide(int currentObjId) {
+    // 1. Nettoyage complet de l'écran
+    my_lcd.Fill_Screen(BLACK);
+    
+    // 2. Configuration STRICTE du texte pour éviter le fond rouge
+    my_lcd.Set_Text_Mode(0);              // Mode 0 = Opaque (écrase ce qu'il y a derrière)
+    my_lcd.Set_Text_Back_colour(BLACK);   // Force le fond du texte en NOIR
+    
+    // 3. Titre
+    my_lcd.Set_Text_Size(2);
+    my_lcd.Set_Text_colour(CYAN);
+    my_lcd.Print_String("CALENDRIER DE VISIBILITE", 50, 15);
 
-    if (objectId == 0) {
-        lines = AND_LINES;
-    } else if (objectId == 1) {
-        lines = ORI_LINES;
-    } else if (objectId == 2) {
-        lines = TAU_LINES;
-    } else {
-        return;
-    }
+    int startX = 90;   
+    int startY = 80;   
+    int cellW = 30;    
+    int cellH = 40;    
+    
+    const char* mois[] = {"JAN","FEV","MAR","AVR","MAI","JUN","JUL","AOU","SEP","OCT","NOV","DEC"};
+    const char* noms[] = {"M31", "M42", "M45", "NGC"};
 
-    // Réglage de la couleur du texte (pour être sûr)
-    my_lcd.Set_Text_colour(WHITE); 
-
-    // Le tableau 'lines' contient des blocs de 4 entiers : x1, y1, x2, y2
-    for (int i = 0; lines[i] != -1; i += 4) {
-        int x1_rel = lines[i];
-        int y1_rel = lines[i+1];
-        int x2_rel = lines[i+2];
-        int y2_rel = lines[i+3];
-
-        // Transformation des coordonnées relatives (0-100) en coordonnées d'écran absolues
-        int x1 = x_start + (x1_rel * width) / 100;
-        int y1 = y_start + (y1_rel * height) / 100;
-        int x2 = x_start + (x2_rel * width) / 100;
-        int y2 = y_start + (y2_rel * height) / 100;
-
-        // Dessiner l'étoile (point) au début de chaque segment
-        my_lcd.Fill_Circle(x1, y1, 3); // Rayon 3 pour une meilleure visibilité
+    for (int m = 0; m < 12; m++) {
+        // Mois en haut
+        my_lcd.Set_Text_Size(1);
+        my_lcd.Set_Text_colour(WHITE);
+        my_lcd.Set_Text_Back_colour(BLACK); // Sécurité répétée
+        my_lcd.Print_String(mois[m], startX + (m * cellW) + 2, startY - 20);
         
-        // Dessiner la ligne
-        my_lcd.Draw_Line(x1, y1, x2, y2);
-        
-        // Dessiner l'étoile (point) à la fin du dernier segment 
-        if (lines[i+4] == -1) {
-            my_lcd.Fill_Circle(x2, y2, 3); // Rayon 3 pour la dernière étoile
+        for (int obj = 0; obj < 4; obj++) {
+            if(m == 0) {
+                // Noms à gauche
+                my_lcd.Set_Text_Size(2);
+                my_lcd.Set_Text_colour(obj == currentObjId ? CYAN : WHITE);
+                my_lcd.Set_Text_Back_colour(BLACK); // Sécurité répétée
+                my_lcd.Print_String(noms[obj], 15, startY + (obj * cellH) + 12);
+            }
+
+            uint16_t color = BLACK;
+            int mm = m + 1; 
+            
+            if(obj == 0) { // M31
+                color = (mm >= 8 && mm <= 11) ? GREEN : ((mm >= 12 || mm <= 2) ? YELLOW : BLACK);
+            } else if(obj == 1 || obj == 2) { // M42 & M45
+                color = (mm >= 11 || mm <= 1) ? GREEN : ((mm == 10 || mm == 2) ? YELLOW : BLACK);
+            } else if(obj == 3) { // NGC 7000
+                color = (mm >= 6 && mm <= 9) ? GREEN : ((mm == 5 || mm == 10) ? YELLOW : BLACK);
+            }
+
+            int x1 = startX + (m * cellW);
+            int y1 = startY + (obj * cellH);
+            int x2 = x1 + cellW - 4;
+            int y2 = y1 + cellH - 4;
+
+            if(color != BLACK) {
+                my_lcd.Set_Draw_color(color);
+                my_lcd.Fill_Rectangle(x1, y1, x2, y2);
+            } else {
+                my_lcd.Set_Draw_color(0x2104); 
+                my_lcd.Draw_Rectangle(x1, y1, x2, y2);
+            }
         }
     }
-}
+
+    // Curseur mois actuel
+    extern RTC_DS3231 rtc;
+    int curM = rtc.now().month() - 1;
+    my_lcd.Set_Draw_color(WHITE);
+    my_lcd.Draw_Rectangle(startX + (curM * cellW) - 2, startY - 5, 
+                         startX + ((curM + 1) * cellW) - 2, startY + (4 * cellH) + 2);
+}*/
