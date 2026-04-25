@@ -15,6 +15,12 @@ extern const double M42_DEC_DEGREES;
 extern const double M45_RA_HOURS;
 extern const double M45_DEC_DEGREES;
 
-extern const double LMC_RA_HOURS;
-extern const double LMC_DEC_DEGREES;
+extern const double NGC7000_RA_HOURS;
+extern const double NGC7000_DEC_DEGREES;
+
+extern const double NGC2237_RA_HOURS;
+extern const double NGC2237_DEC_DEGREES;
+
+extern const double IC1805_RA_HOURS;
+extern const double IC1805_DEC_DEGREES;
 #endif 
