@@ -163,10 +163,13 @@ void loop() {
             currentImage = pleiadesImage;
         } else if (currentObject == 3) { 
             currentImage = ngc7000Image;
+        } else if (currentObject == 4) { 
+            currentImage = ngc2237Image;
+        } else if (currentObject == 5) {
+            currentImage = ic1805Image;
         }
         draw_bmp_picture(currentImage, 0, 40); 
     }
-    
 
     // --- Récupération des données pour l'objet actuel ---
     double RA, dec_coord;
