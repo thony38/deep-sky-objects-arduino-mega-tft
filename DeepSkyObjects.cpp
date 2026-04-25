@@ -21,8 +21,20 @@ const double M45_RA_HOURS = 3.783333333;
 // Dec : +24° 07' 00" (converti en degrés)
 const double M45_DEC_DEGREES = 24.11666667;
 
-// --- 4. Grand Nuage De Magellan (LMC) ---
-// RA : 05h 23m 34s
-const double LMC_RA_HOURS = 5.392777778;
-// Dec : -69° 45' 22"
-const double LMC_DEC_DEGREES = -69.756111;
+// --- 4. Nébuleuse de l'Amérique du Nord (NGC7000) ---
+// RA : 20h 58m 47s
+const double NGC7000_RA_HOURS = 20.9797;
+// Dec : +44° 19' 40"
+const double NGC7000_DEC_DEGREES = 44.3277;
+
+// --- 5. Nébuleuse de Rosette (NGC2237) ---
+// RA 06h 32m 13s  
+const double NGC2237_RA_HOURS = 6.5369;
+// DEC +04° 51' 59"
+const double NGC2237_DEC_DEGREES = 4.8664;
+
+//  --- 5. Nébuleuse du Coeur (IC 1805) ---
+//RA 02h 32m 42s 
+const double IC1805_RA_HOURS = 2.5450;
+//DEC +61° 27' 00" 
+const double IC1805_DEC_DEGREES = 61.4500;
