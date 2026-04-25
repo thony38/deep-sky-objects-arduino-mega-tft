@@ -15,14 +15,16 @@ Projet : Horloge Astronomique
 #include <Ephemeris.h> // Calculs astronomiques (Altitude, Azimut, Lever/Coucher)
 #include <math.h>      // Fonctions mathématiques
 // --- INCLUSIONS DES FICHIERS PERSONNALISÉS ---
-#include "DeepSkyObjects.h" // Contient les constantes des coordonnées (M31, M42, M45, LMC)
+#include "DeepSkyObjects.h" // Contient les constantes des coordonnées (M31, M42, M45, NGC7000)
 #include "astro_display.h"  // Contient les prototypes des fonctions utilitaires et d'affichage
 
+//             CS  CD  WR  RD  RST  D0  D1  D2  D3  D4  D5  D6  D7  D8  D9  D10  D11  D12  D13  D14  D15 
+//Arduino Mega 40  38  39  /   41   37  36  35  34  33  32  31  30  22  23  24   25   26   27   28   29
 
 // --- DÉCLARATIONS DES OBJETS ET VARIABLES GLOBALES ---
 
 // Initialisation de l'écran TFT
-LCDWIKI_KBV my_lcd(ILI9486, 40, 38, 39, 44, 41);
+LCDWIKI_KBV my_lcd(ILI9486, 40, 38, 39, -1, 41);
 // Initialisation du module RTC
 RTC_DS3231 rtc;
 
@@ -31,9 +33,8 @@ RTC_DS3231 rtc;
 // Variables d'état et de contrôle
 int rtcStatus = 0; // 0: OK, 1: Erreur I2C, 2: Pile faible
 int minuteCounter = 60; // Compteur pour rafraîchissement TFT (Force un affichage au démarrage)
-int currentObject = 0; // 0=M31, 1=M42, 2=M45, 3=LMC
+int currentObject = 0; // 0=M31, 1=M42, 2=M45, 3=NGC7000
 
-// Rotation images/info sur l'écran
 /*5 minutes équivalent à 5 x 60 = 300 secondes.
 300 secondes équivalent à 300 x 1000 = 300,000 millisecondes.*/
 unsigned long lastRotationTime = 0;
@@ -43,12 +44,14 @@ const long rotationInterval = 60000; // Rotation d'objet toutes les 10 secondes
 const char* andromedaImage = "ANDRO.bmp";
 const char* orionImage = "ORION.bmp";    
 const char* pleiadesImage = "PLEIADE.bmp"; 
-const char* lmcImage = "LMC.bmp"; 
+const char* ngc7000Image = "NGC7000.bmp"; 
+const char* ngc2237Image = "NGC2237.bmp";
+const char* ic1805Image = "IC1805.bmp";
 
 const char* currentImage = andromedaImage; // Pointeur vers l'image actuellement affichée
 
 
-// --- FONCTIONS SD/BMP (Restent inchangées) ---
+// --- FONCTIONS SD/BMP ---
 
 bool check_bmp_header(File &bmpFile) {
     if (bmpFile.read() != 'B' || bmpFile.read() != 'M') return false;
@@ -92,7 +95,7 @@ void setup() {
 
     // Configuration de la position géographique (Paris, France)
     Ephemeris::setLocationOnEarth(48, 51, 24, 2, 21, 8);
-    
+        
     // Initialisation de la carte SD
     if (!SD.begin(SD_CS)) {
         my_lcd.Set_Text_colour(RED);
@@ -107,14 +110,21 @@ void setup() {
     
    // Initialisation du module RTC 
     if (!rtc.begin()) {
-        rtcStatus = 1; // Erreur critique I2C/Module
+        rtcStatus = 1; 
         Serial.println("⛔ Erreur RTC critique (I2C/Module non detecte).");
     } else {
+        // force de la mise à jour à chaque démarrage du code
+        /* LIGNE À DÉCOMMENTER POUR RÉGLER L'HEURE
+          ->  Téléverser le code
+          ->  Commenter 
+          -> Retéléverser
+        */
+         //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+
         if (rtc.lostPower()) {
             rtcStatus = 2; // Pile faible
             Serial.println("⚠️ Pile RTC faible ou heure perdue. Reinitialisation necessaire.");
-            // LIGNE À DÉCOMMENTER POUR RÉGLER L'HEURE
-            //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
         }
         Serial.println("✅ RTC prêt.");
     }
@@ -138,7 +148,7 @@ void loop() {
     if (currentTime - lastRotationTime >= rotationInterval) {
         currentObject++;
         if (currentObject > 3) {
-            currentObject = 0; // Cycle: M31 -> M42 -> M45 -> LMC -> M31...
+            currentObject = 0; // Cycle: M31 -> M42 -> M45 -> NGC7000 -> ... -> M31...
         }
         lastRotationTime = currentTime;
         minuteCounter = 60;
@@ -152,7 +162,7 @@ void loop() {
         } else if (currentObject == 2) {
             currentImage = pleiadesImage;
         } else if (currentObject == 3) { 
-            currentImage = lmcImage;
+            currentImage = ngc7000Image;
         }
         draw_bmp_picture(currentImage, 0, 40); 
     }
