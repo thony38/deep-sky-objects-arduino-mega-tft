@@ -6,7 +6,7 @@ Station info astronomique basée sur Arduino Mega. Calcule et affiche la positio
 
 Suivi en direct : Calcul d'Altitude/Azimut et Lever/Coucher (Andromède, Orion, Pléiades, NGC7000, NGC2237, IC1805, ...).
 
-Visuels : Affichage d'images BMP depuis une carte SD et .
+Visuels : Affichage d'images BMP depuis une carte SD . Chaques images ont une résolution de 240px par 240px. 
 
 Précision : Heure gérée par module RTC DS3231 avec gestion de l'heure d'été.
 
