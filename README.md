@@ -21,3 +21,9 @@ INFO TFT --> https://www.lcdwiki.com/3.5inch_Arduino_Display-Mega2560
 Ajout d'une fonction de difficulté 
 Ajout d'objets : IC1805 HEART NEBULA
                  NGC2237 Rosette Nebula
+
+
+
+![top-view](deep-sky-objects-arduino-mega-tft/image/1777398286571.png)
+![top-view2](deep-sky-objects-arduino-mega-tft/image/1777398286543.png)
+![top-view3](deep-sky-objects-arduino-mega-tft/image/1777398286556.png)
