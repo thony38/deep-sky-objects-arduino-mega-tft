@@ -25,5 +25,5 @@ Ajout d'objets : IC1805 HEART NEBULA
 
 
 ![top-view](image/1777398286543.jpg)
-![top-view2](image/1777398286543.png)
-![top-view3](image/1777398286556.png)
+![top-view2](image/1777398286543.jpg)
+![top-view3](image/1777398286571.jpg)
